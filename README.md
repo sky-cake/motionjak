@@ -4,7 +4,7 @@ A multimedia puppeteering solution for video creation. With https://www.maartenb
 
 Image Preview:
 
-![Screenshot from 2024-06-11 17-19-48](https://github.com/sky-cake/motionjak/assets/141000083/951b28b5-2d20-4bef-a6c5-ab6c3d0fa943)
+![Screenshot from 2024-08-01 19-03-21](https://github.com/user-attachments/assets/98150207-e7f0-47e8-b397-92dac1f2ba85)
 
 Video Preview:
 
