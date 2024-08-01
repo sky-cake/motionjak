@@ -18,8 +18,8 @@
             text-align: center;
         }
         button {
-            margin: 10px auto;
-            padding: 10px 20px;
+            margin: 5px auto;
+            padding: 7px 10px;
             font-size: 16px;
             color: #fff;
             cursor: pointer;
@@ -39,7 +39,7 @@
             border: 1px solid #a1a1a1;
             background-color: #7100a5;
         }
-        #reset_parent_btn {
+        #reset_parent_btn, #clear_overlay {
             border: 1px solid #a1a1a1;
             background-color: #1e00a5;
         }
@@ -108,7 +108,7 @@
             100% { transform: translateY(500px); }
         }
         p {
-            margin: 2px;
+            margin: 1px;
         }
     </style>
 </head>
@@ -121,26 +121,28 @@
 
     <button id="image_input_btn">Import Media</button>
     <button id="audio_input_btn">Import Audio</button>
-    <button id="reset_parent_btn">Reset Canvas</button>
+    <button id="reset_parent_btn">Wipe Display</button>
     <button id="reset_all_btn">Reset All</button>
     
     <p id="audio_container"></p>
     
     <div id="thumbnail_grid"></div>
     <p>
+        <button id="stop_all">Stop Keyframes</button>
+        <button id="clear_overlay">Clear Overlay</button>
+    </p>
+    <p>
         <button id="curtsey">curtsey</button>
         <button id="hobble">hobble</button>
         <button id="bloat">bloat</button>
         <button id="crouch">crouch</button>
-        <button id="go_off_screen">go_off_screen</button>
+        <button id="go_off_screen">exit screen</button>
         <button id="walk">walk</button>
-        <button id="left_corner">left_corner</button>
-        <button id="right_corner">right_corner</button>
-        <button id="fade_in">fade_in</button>
-        <button id="fade_out">fade_out</button>
-        <button id="stop_all">stop_all</button>
+        <button id="left_corner">goto left corner</button>
+        <button id="right_corner">goto right corner</button>
+        <button id="fade_in">fade in</button>
+        <button id="fade_out">fade out</button>
     </p>
-
     <div id="parent_media_container"></div>
 </div>
 
@@ -275,7 +277,7 @@
                 fade_out(child_media_old, duration);
                 setInterval(() => {
                     child_media_old.remove();
-                }, duration + 1000);
+                }, duration + 500);
             }
             
             media.style.opacity = 0;
@@ -326,11 +328,20 @@
     });
 
     document.getElementById('bloat').addEventListener('click', function() {
-        document.getElementById('child_media').classList = 'bloat';
+        document.getElementById('child_media').classList = '';
+        setTimeout(() => {
+            document.getElementById('child_media').classList = 'bloat';
+        }, 100);
     });
 
     document.getElementById('stop_all').addEventListener('click', function() {
         document.getElementById('child_media').classList = '';
+    });
+
+    document.getElementById('clear_overlay').addEventListener('click', function() {
+        while (document.getElementById('child_media')) {
+            document.getElementById('child_media').remove();
+        }
     });
 
     function animateElement(element, startX, startY, endX, endY, duration) {
@@ -392,8 +403,7 @@
         animate();
     }
 
-    function go_off_screen(){
-        const childMedia = document.getElementById("child_media");
+    function go_off_screen(childMedia){
         const childMediaRec = childMedia.getBoundingClientRect();
         const parentMediaRec = document.getElementById("parent_media").getBoundingClientRect();
 
@@ -411,8 +421,7 @@
         animateElement(childMedia, startX, startY, endX, endY, 3000);
     }
 
-    function walk_smoothly() {
-        const childMedia = document.getElementById("child_media");
+    function walk_smoothly(childMedia) {
         const childMediaRec = childMedia.getBoundingClientRect();
         const parentMediaRec = document.getElementById("parent_media").getBoundingClientRect();
 
@@ -426,8 +435,7 @@
         animateElement(childMedia, startX, startY, endX, endY, 3000);
     }
 
-    function crouch_halfway_down() {
-        const childMedia = document.getElementById("child_media");
+    function crouch_halfway_down(childMedia) {
         const childMediaRec = childMedia.getBoundingClientRect();
         const parentMediaRec = document.getElementById("parent_media").getBoundingClientRect();
 
@@ -439,8 +447,7 @@
         animateElement(childMedia, startX, startY, endX, endY, 1500);
     }
 
-    function go_to_corner_right() {
-        const childMedia = document.getElementById("child_media");
+    function go_to_corner_right(childMedia) {
         const childMediaRec = childMedia.getBoundingClientRect();
         const parentMediaRec = document.getElementById("parent_media").getBoundingClientRect();
 
@@ -454,8 +461,7 @@
         animateElement(childMedia, startX, startY, endX, endY, 2000);
     }
 
-    function go_to_corner_left() {
-        const childMedia = document.getElementById("child_media");
+    function go_to_corner_left(childMedia) {
         const childMediaRec = childMedia.getBoundingClientRect();
         const parentMediaRec = document.getElementById("parent_media").getBoundingClientRect();
 
@@ -469,13 +475,13 @@
         animateElement(childMedia, startX, startY, endX, endY, 2000);
     }
 
-    document.getElementById("walk").addEventListener("click", walk_smoothly);
-    document.getElementById("crouch").addEventListener("click", crouch_halfway_down);
-    document.getElementById("left_corner").addEventListener("click", go_to_corner_left);
-    document.getElementById("right_corner").addEventListener("click", go_to_corner_right);
+    document.getElementById("walk").addEventListener("click", () => walk_smoothly(document.getElementById("child_media")));
+    document.getElementById("crouch").addEventListener("click", () => crouch_halfway_down(document.getElementById("child_media")));
+    document.getElementById("left_corner").addEventListener("click", () => go_to_corner_left(document.getElementById("child_media")));
+    document.getElementById("right_corner").addEventListener("click", () => go_to_corner_right(document.getElementById("child_media")));
+    document.getElementById("go_off_screen").addEventListener("click", () => go_off_screen(document.getElementById("child_media")));
     document.getElementById("fade_in").addEventListener("click", () => fade_in(document.getElementById("child_media"), 2000));
     document.getElementById("fade_out").addEventListener("click", () => fade_out(document.getElementById("child_media"), 2000));
-    document.getElementById("go_off_screen").addEventListener("click", go_off_screen);
 
 </script>
 
