@@ -25,7 +25,7 @@
             cursor: pointer;
             border-radius: 5px;
             border: 1px solid #a1a1a1;
-            background-color: #002019;
+            background-color: #2e4268;
         }
         #image_input_btn {
             border: 1px solid #a1a1a1;
@@ -33,7 +33,7 @@
         }
         #audio_input_btn {
             border: 1px solid #a1a1a1;
-            background-color: #007535;
+            background-color: #165331;
         }
         #reset_all_btn {
             border: 1px solid #a1a1a1;
@@ -47,6 +47,18 @@
             border: 1px solid #a1a1a1;
             background-color: #550000;
         }
+        .move {
+            border: 1px solid #a1a1a1;
+            background-color: #6b4040;
+        }
+        .keyframe_anime {
+            border: 1px solid #a1a1a1;
+            background-color: #4f7958;
+        }
+        .effect {
+            border: 1px solid #a1a1a1;
+            background-color: #687400;
+        }
         #thumbnail_grid {
             display: flex;
             flex-wrap: wrap;
@@ -55,13 +67,24 @@
         .thumbnail {
             width: 40px;
             height: 40px;
-            margin: 2px;
+            margin: 0 4px;
             cursor: pointer;
             opacity: 0.7;
             transition: opacity 0.3s ease;
+            display: block;
         }
         .thumbnail:hover {
             opacity: 1;
+        }
+        p {
+            margin: 1px;
+        }
+        .thumbnail-container {
+            display: inline-block;
+            text-align: center;
+            margin: 0;
+            font-size: 8pt;
+            padding: 4px;
         }
         #parent_media_container {
             display: none;
@@ -107,9 +130,6 @@
             0% { transform: translateY(none); }
             100% { transform: translateY(500px); }
         }
-        p {
-            margin: 1px;
-        }
     </style>
 </head>
 <body>
@@ -132,16 +152,20 @@
         <button id="clear_overlay">Clear Overlay</button>
     </p>
     <p>
-        <button id="curtsey">curtsey</button>
-        <button id="hobble">hobble</button>
-        <button id="bloat">bloat</button>
-        <button id="crouch">crouch</button>
+        <button id="curtsey" class="keyframe_anime">curtsey</button>
+        <button id="hobble" class="keyframe_anime">hobble</button>
+        <button id="go_to_center" class="move">center center</button>
+        <button id="bloat" class="keyframe_anime">bloat</button>
+    </p>
+    <p>
         <button id="go_off_screen">exit screen</button>
         <button id="walk">walk</button>
-        <button id="left_corner">goto left corner</button>
-        <button id="right_corner">goto right corner</button>
-        <button id="fade_in">fade in</button>
-        <button id="fade_out">fade out</button>
+        <button id="crouch">crouch</button>
+        <button id="left_corner" class="move">left</button>
+        <button id="go_to_center_bottom" class="move">center</button>
+        <button id="right_corner" class="move">right</button>
+        <button id="fade_in" class="effect">fade in</button>
+        <button id="fade_out" class="effect">fade out</button>
     </p>
     <div id="parent_media_container"></div>
 </div>
@@ -187,31 +211,36 @@
                 const reader = new FileReader();
                 reader.onload = function() {
 
-                    var media_node_type;
-                    var media = document.createElement('div');
+                    const container = document.createElement('div');
+                    container.classList.add('thumbnail-container');
 
+                    var media;
                     if (file.type.startsWith('image/')) {
-                        media_node_type = 'img';
-                        media.innerHTML = get_image_node(reader.result);
+                        media = document.createElement('img');
+                        media.src = reader.result;
                         media.style.borderColor = '#7100a5';
                     }
                     else {
-                        media_node_type = 'video';
-                        media.innerHTML = get_video_node(reader.result);
+                        media = document.createElement('video');
+                        media.src = reader.result;
+                        media.controls = true;
                         media.style.borderColor = '#00639c';
                     }
 
-                    media = media.firstChild;
-                    media.style.borderWidth = '1px';
-                    media.style.borderRadius = '3px';
-                    media.style.borderStyle = 'solid';
                     media.classList.add('thumbnail');
+
+                    container.appendChild(media);
                     
-                    media.addEventListener('click', function() {
-                        display_selected_image(media_node_type, reader.result);
+                    const name = document.createElement('span');
+                    const filename = String(file.name);
+                    name.innerHTML = filename.substring(0, filename.lastIndexOf('.')).substring(0, 12);
+                    container.appendChild(name);
+
+                    container.addEventListener('click', function() {
+                        display_selected_image(file.type.startsWith('image/') ? 'img' : 'video', reader.result);
                     });
-                    
-                    thumbnail_grid.appendChild(media);
+
+                    thumbnail_grid.appendChild(container);
                 };
                 reader.readAsDataURL(file);
             }
@@ -278,6 +307,9 @@
                 setInterval(() => {
                     child_media_old.remove();
                 }, duration + 500);
+
+                media.style.left = child_media_old.style.left;
+                media.style.top = child_media_old.style.top;
             }
             
             media.style.opacity = 0;
@@ -366,6 +398,10 @@
     }
 
     function fade_in(element, duration) {
+        if (element.style.opacity >= 0.95){
+            return;
+        }
+
         let opacity = 0;
         const interval = 10;
         const increment = interval / duration;
@@ -385,6 +421,10 @@
     }
 
     function fade_out(element, duration) {
+        if (element.style.opacity <= 0.05){
+            return;
+        }
+
         let opacity = 1;
         const interval = 10;
         const increment = interval / duration;
@@ -475,8 +515,34 @@
         animateElement(childMedia, startX, startY, endX, endY, 2000);
     }
 
+    function go_to_center(childMedia) {
+        const childMediaRec = childMedia.getBoundingClientRect();
+        const parentMediaRec = document.getElementById("parent_media").getBoundingClientRect();
+
+        const startX = childMediaRec.left;
+        const startY = childMediaRec.top;
+        const endX = parentMediaRec.left + (parentMediaRec.width / 2) - (childMediaRec.width / 2);
+        const endY = parentMediaRec.top + (parentMediaRec.height / 2) - (childMediaRec.height / 2);
+
+        animateElement(childMedia, startX, startY, endX, endY, 2000);
+    }
+
+    function go_to_center_bottom(childMedia) {
+        const childMediaRec = childMedia.getBoundingClientRect();
+        const parentMediaRec = document.getElementById("parent_media").getBoundingClientRect();
+
+        const startX = childMediaRec.left;
+        const startY = childMediaRec.top;
+        const endX = parentMediaRec.left + (parentMediaRec.width / 2) - (childMediaRec.width / 2);
+        const endY = parentMediaRec.bottom - childMediaRec.height;
+
+        animateElement(childMedia, startX, startY, endX, endY, 2000);
+    }
+
     document.getElementById("walk").addEventListener("click", () => walk_smoothly(document.getElementById("child_media")));
     document.getElementById("crouch").addEventListener("click", () => crouch_halfway_down(document.getElementById("child_media")));
+    document.getElementById("go_to_center").addEventListener("click", () => go_to_center(document.getElementById("child_media")));
+    document.getElementById("go_to_center_bottom").addEventListener("click", () => go_to_center_bottom(document.getElementById("child_media")));
     document.getElementById("left_corner").addEventListener("click", () => go_to_corner_left(document.getElementById("child_media")));
     document.getElementById("right_corner").addEventListener("click", () => go_to_corner_right(document.getElementById("child_media")));
     document.getElementById("go_off_screen").addEventListener("click", () => go_off_screen(document.getElementById("child_media")));
