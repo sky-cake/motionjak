@@ -110,6 +110,10 @@
         .curtsey {
             animation: curtseyAnimation 4s infinite;
         }
+        .spin {
+            transform: rotate(360deg);
+            transition: transform 1s ease-in-out;
+        }
         @keyframes hobbleAnimation {
             0% { transform: translateY(0); }
             50% { transform: translateY(10px); }
@@ -156,6 +160,7 @@
         <button id="hobble" class="keyframe_anime">hobble</button>
         <button id="go_to_center" class="move">center center</button>
         <button id="bloat" class="keyframe_anime">bloat</button>
+        <button id="spin" class="keyframe_anime">spin</button>
     </p>
     <p>
         <button id="go_off_screen">exit screen</button>
@@ -353,6 +358,13 @@
 
     document.getElementById('curtsey').addEventListener('click', function() {
         document.getElementById('child_media').classList = 'curtsey';
+    });
+
+    document.getElementById('spin').addEventListener('click', function() {
+        document.getElementById('child_media').classList = '';
+        setTimeout(() => {
+            document.getElementById('child_media').classList = 'spin';
+        }, 100);
     });
 
     document.getElementById('hobble').addEventListener('click', function() {
