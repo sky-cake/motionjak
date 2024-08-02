@@ -4,7 +4,8 @@ A multimedia puppeteering solution for video creation. With https://www.maartenb
 
 Image Preview:
 
-![Screenshot from 2024-08-01 20-24-08](https://github.com/user-attachments/assets/36d24b93-2d47-49e7-8e45-9833dde38cc7)
+![Screenshot from 2024-08-01 20-35-06](https://github.com/user-attachments/assets/004b4541-31e4-494c-afa9-faf2a581b3a8)
+
 
 Video Preview:
 
