@@ -216,7 +216,7 @@
                                 <tr>
                                     <td>
                                         <label for="size_slider">Size</label>
-                                        <input type="range" id="size_slider" min="0" max="1000">
+                                        <input type="range" id="size_slider" min="0" max="800">
                                     </td>
                                 </tr>
                             </table>
@@ -351,11 +351,6 @@
                     else {
                         media_node_type = 'video';
                         media = document.createElement('video');
-                        // media.controls = 1;
-                        // source.type = 'video/mp4';
-                        // source = document.createElement('source');
-                        // source.src = source;
-                        // media.appendChild(source);
                         media.src = reader.result;
                         media.style.borderColor = '#00639c';
                     }
@@ -435,11 +430,13 @@
 
             const duration = 700;
             const child_media_old = document.getElementById('child_media');
+            let current_opacity = 1;
             if (child_media_old) {
-                fade_out(child_media_old, duration);
-                setInterval(() => {
+                current_opacity = child_media_old.style.opacity;
+                fade_out_a_to_b(child_media_old, duration, current_opacity, 0);
+                setTimeout(() => {
                     child_media_old.remove();
-                }, duration + 500);
+                }, duration + 200);
 
                 media.style.left = child_media_old.style.left;
                 media.style.top = child_media_old.style.top;
@@ -447,7 +444,7 @@
             
             media.style.opacity = 0;
             document.body.appendChild(media);
-            fade_in(media, duration);
+            fade_in_a_to_b(media, duration, 0, current_opacity);
         }
         else {
             parent_media = get_media_node(media_node_type, media_src);
@@ -540,15 +537,47 @@
         requestAnimationFrame(animate);
     }
 
+    function fade_in_a_to_b(element, duration, a, b) {
+        let opacity = a;
+        const interval = 10;
+        const increment = interval / duration;
+        function animate() {
+            opacity += increment;
+            if (opacity >= b) {
+                opacity = b;
+                element.style.opacity = opacity;
+                return;
+            }
+            element.style.opacity = opacity;
+            requestAnimationFrame(animate);
+        }
+        animate();
+    }
+
+    function fade_out_a_to_b(element, duration, a, b) {
+        let opacity = a;
+        const interval = 10;
+        const increment = interval / duration;
+        function animate() {
+            opacity -= increment;
+            if (opacity <= b) {
+                opacity = b;
+                element.style.opacity = opacity;
+                return;
+            }
+            element.style.opacity = opacity;
+            requestAnimationFrame(animate);
+        }
+        animate();
+    }
+
     function fade_in(element, duration) {
         if (element.style.opacity >= 0.95){
             return;
         }
-
         let opacity = 0;
         const interval = 10;
         const increment = interval / duration;
-
         function animate() {
             opacity += increment;
             if (opacity >= 1) {
@@ -559,7 +588,6 @@
             element.style.opacity = opacity;
             requestAnimationFrame(animate);
         }
-
         animate();
     }
 
@@ -567,11 +595,9 @@
         if (element.style.opacity <= 0.05){
             return;
         }
-
         let opacity = 1;
         const interval = 10;
         const increment = interval / duration;
-
         function animate() {
             opacity -= increment;
             if (opacity <= 0) {
@@ -582,7 +608,6 @@
             element.style.opacity = opacity;
             requestAnimationFrame(animate);
         }
-
         animate();
     }
 
