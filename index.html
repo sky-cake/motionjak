@@ -159,6 +159,11 @@
             padding: 0;
             border: 1px solid #553dbd;
         }
+        input[type="text"] {
+            padding: 4px;
+            margin-top: 1.5em;
+            border: 1px solid #553dbd;
+        }
     </style>
 </head>
 <body>
@@ -170,11 +175,14 @@
                 <div><strong>MotionJak</strong></div>
                 <input type="file" id="image_input" accept="image/*,video/*" multiple style="display:none;">
                 <input type="file" id="audio_input" accept="audio/mpeg" style="display:none; max-width: 50%">
-            
+                
                 <button id="image_input_btn">Import Media</button>
                 <button id="audio_input_btn">Import Audio</button>
                 <button id="reset_parent_btn">Wipe Display</button>
                 <button id="reset_all_btn">Reset All</button>
+            </td>
+            <td>
+                <input type="text" id="filepath" placeholder="full path to video directory">
             </td>
             <td>
                 <table>
@@ -353,18 +361,32 @@
                     const container = document.createElement('div');
                     container.classList.add('thumbnail-container');
 
+                    var filePath = document.getElementById('filepath').value;
+                    if (filePath){
+                        if (filePath.endsWith('/')) {
+                            filePath = filePath.slice(0, -1);
+                        }
+                        if (!filePath.startsWith('file://')) {
+                            filePath = 'file://' + filePath;
+                        }
+                        filePath += '/' + file.name;
+                    }
+                    else{
+                        filePath = reader.result;
+                    }
+
                     var media;
                     var media_node_type;
                     if (file.type.startsWith('image/')) {
                         media_node_type = 'img';
                         media = document.createElement('img');
-                        media.src = reader.result;
+                        media.src = filePath;
                         media.style.borderColor = '#7100a5';
                     }
                     else {
                         media_node_type = 'video';
                         media = document.createElement('video');
-                        media.src = reader.result;
+                        media.src = filePath;
                         media.style.borderColor = '#00639c';
                     }
 
@@ -378,7 +400,7 @@
                     container.appendChild(name);
 
                     media.addEventListener('click', function() {
-                        display_selected_image(media_node_type, reader.result);
+                        display_selected_image(media_node_type, filePath);
                     });
 
                     thumbnail_grid.appendChild(container);
@@ -454,8 +476,7 @@
                 media.style.left = child_media_old.style.left;
                 media.style.top = child_media_old.style.top;
             }
-            
-            media.style.opacity = 0;
+
             document.body.appendChild(media);
             fade_in_a_to_b(media, duration, 0, current_opacity);
         }
@@ -486,6 +507,8 @@
 
         const audio_container = document.getElementById('audio_container');
         audio_container.innerHTML = '';
+
+        document.getElementById('textInput').value = '';
     });
 
     document.getElementById('reset_parent_btn').addEventListener('click', function() {
