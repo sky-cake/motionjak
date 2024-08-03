@@ -6,7 +6,7 @@
     <title>MotionJak</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Ubuntu', sans-serif;
             margin: 0;
             padding: 0;
             margin-top: 4px;
@@ -91,8 +91,8 @@
             margin-bottom: 20px;
         }
         #parent_media {
-            max-width: 100%;
-            max-height: 400px;
+            max-width: 95%;
+            max-height: 800px;
         }
         #child_media {
             position: absolute;
@@ -135,11 +135,11 @@
             100% { transform: translateY(500px); }
         }
         #text_overlay {
-            background-color: rgb(55, 0, 207);
-            color: #cb21ff;
+            background-color: #00335e;
+            color: #34bfff;
+            border: 4px solid #006a94;
             padding: 5px;
             margin: 5px;
-            border: 4px solid #553dbd;
             position: absolute;
             z-index: 2;
             white-space: pre-wrap;
@@ -148,52 +148,156 @@
             border: 1px solid #553dbd;
             border-radius: 5px;
             padding: 2px;
+            background-color: #3b3b3b;
+            color: #f3f3f3;
+        }
+        table {
+            margin: 0 auto;
+        }
+        input[type="color"] {
+            padding: 0;
+            border: 1px solid #553dbd;
         }
     </style>
 </head>
 <body>
 
 <div id="container">
-    <div><strong>MotionJak</strong></div>
-    <input type="file" id="image_input" accept="image/*,video/*" multiple style="display:none;">
-    <input type="file" id="audio_input" accept="audio/mpeg" style="display:none; max-width: 50%">
-
-    <button id="image_input_btn">Import Media</button>
-    <button id="audio_input_btn">Import Audio</button>
-    <button id="reset_parent_btn">Wipe Display</button>
-    <button id="reset_all_btn">Reset All</button>
-    
+    <table>
+        <tr>
+            <td>
+                <div><strong>MotionJak</strong></div>
+                <input type="file" id="image_input" accept="image/*,video/*" multiple style="display:none;">
+                <input type="file" id="audio_input" accept="audio/mpeg" style="display:none; max-width: 50%">
+            
+                <button id="image_input_btn">Import Media</button>
+                <button id="audio_input_btn">Import Audio</button>
+                <button id="reset_parent_btn">Wipe Display</button>
+                <button id="reset_all_btn">Reset All</button>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <td>
+                            <button id="stop_all">Stop Keyframes</button>
+                            <button id="curtsey" class="keyframe_anime">curtsey</button>
+                            <button id="hobble" class="keyframe_anime">hobble</button>
+                            <button id="go_to_center" class="move">center center</button>
+                            <button id="bloat" class="keyframe_anime">bloat</button>
+                            <button id="spin" class="keyframe_anime">spin</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button id="clear_overlay">Clear Overlay</button>
+                            <button id="go_off_screen">exit screen</button>
+                            <button id="walk">walk</button>
+                            <button id="crouch">crouch</button>
+                            <button id="left_corner" class="move">left</button>
+                            <button id="go_to_center_bottom" class="move">center</button>
+                            <button id="right_corner" class="move">right</button>
+                            <button id="fade_in" class="effect">fade in</button>
+                            <button id="fade_out" class="effect">fade out</button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <label for="opacity_slider">Opactiy</label>
+                                        <input type="range" id="opacity_slider" min="0" max="100" value="100">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="size_slider">Size</label>
+                                        <input type="range" id="size_slider" min="0" max="1000">
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <div class="controls">
+                    <label>
+                        Background <input type="color" id="bg_color" value="#00335e">
+                    </label>
+                    <label>
+                        Text <input type="color" id="text_color" value="#34bfff">
+                    </label>
+                    <label>
+                        Border <input type="color" id="border_color" value="#006a94">
+                    </label>
+                </div>
+                <div id="text_overlay"></div>
+                <textarea type="textarea" id="textInput" cols="40" rows="4" placeholder="Enter dialogue here"></textarea>
+            </td>
+        </tr>
+    </table>
     <p id="audio_container"></p>
-    <textarea type="textarea" id="textInput" cols="60" rows="3" placeholder="Enter dialogue here"></textarea>
-    
     <div id="thumbnail_grid"></div>
-    <p>
-        <button id="stop_all">Stop Keyframes</button>
-        <button id="clear_overlay">Clear Overlay</button>
-    </p>
-    <p>
-        <button id="curtsey" class="keyframe_anime">curtsey</button>
-        <button id="hobble" class="keyframe_anime">hobble</button>
-        <button id="go_to_center" class="move">center center</button>
-        <button id="bloat" class="keyframe_anime">bloat</button>
-        <button id="spin" class="keyframe_anime">spin</button>
-    </p>
-    <p>
-        <button id="go_off_screen">exit screen</button>
-        <button id="walk">walk</button>
-        <button id="crouch">crouch</button>
-        <button id="left_corner" class="move">left</button>
-        <button id="go_to_center_bottom" class="move">center</button>
-        <button id="right_corner" class="move">right</button>
-        <button id="fade_in" class="effect">fade in</button>
-        <button id="fade_out" class="effect">fade out</button>
-    </p>
     <div id="parent_media_container"></div>
-    <div id="text_overlay"></div>
 </div>
 
 <script>
     var SIDE = 'RIGHT';
+
+    document.getElementById('opacity_slider').addEventListener('input', function() {
+        const sliderValue = this.value;
+        const opacityValue = sliderValue / 100;
+        document.getElementById('child_media').style.opacity = opacityValue;
+    });
+
+
+    const size_slider = document.getElementById('size_slider');
+    function updateDimensions(width_i, height_i) {
+        const child_media = document.getElementById('child_media');
+        const child_media_rec = document.getElementById('child_media').getBoundingClientRect();
+
+        const aspect_ratio = child_media_rec.width / child_media_rec.height;
+        const parent_rec = document.getElementById('parent_media').getBoundingClientRect();
+        const max_w = Math.min(size_slider.value, parent_rec.width);
+        const max_h = Math.min(size_slider.value, parent_rec.height);
+
+        if (max_w / aspect_ratio <= max_h) {
+            child_media.style.width = max_w + 'px';
+            child_media.style.height = 'auto';
+        } else {
+            child_media.style.height = max_h + 'px';
+            child_media.style.width = 'auto';
+        }
+        delta_y = child_media_rec.top - ((child_media.height - height_i) / 2);
+        delta_x = child_media_rec.left - ((child_media.width - width_i) / 2);
+        child_media.style.top = delta_y + 'px';
+        child_media.style.left = delta_x + 'px';
+    }
+    size_slider.addEventListener('input', () => {
+        const child_media = document.getElementById('child_media').getBoundingClientRect();
+        updateDimensions(child_media.width, child_media.height);
+    });
+
+
+    const bgColorInput = document.getElementById('bg_color');
+    const textColorInput = document.getElementById('text_color');
+    const borderColorInput = document.getElementById('border_color');
+    const textOverlay = document.getElementById('text_overlay');
+    function updateColors() {
+        textOverlay.style.backgroundColor = bgColorInput.value;
+        textOverlay.style.color = textColorInput.value;
+        textOverlay.style.borderColor = borderColorInput.value;
+    }
+    bgColorInput.addEventListener('input', updateColors);
+    textColorInput.addEventListener('input', updateColors);
+    borderColorInput.addEventListener('input', updateColors);
+    updateColors();
+
 
     document.getElementById('image_input_btn').addEventListener('click', () => {
         document.getElementById('image_input').click();
@@ -213,7 +317,7 @@
     });
 
     function get_video_node(src){
-        return `<video><source src="${src}" type="video/mp4" /></video>`;
+        return `<video controls><source src="${src}"/></video>`;
     }
 
     function get_image_node(src){
@@ -237,15 +341,22 @@
                     container.classList.add('thumbnail-container');
 
                     var media;
+                    var media_node_type;
                     if (file.type.startsWith('image/')) {
+                        media_node_type = 'img';
                         media = document.createElement('img');
                         media.src = reader.result;
                         media.style.borderColor = '#7100a5';
                     }
                     else {
+                        media_node_type = 'video';
                         media = document.createElement('video');
+                        // media.controls = 1;
+                        // source.type = 'video/mp4';
+                        // source = document.createElement('source');
+                        // source.src = source;
+                        // media.appendChild(source);
                         media.src = reader.result;
-                        media.controls = true;
                         media.style.borderColor = '#00639c';
                     }
 
@@ -258,8 +369,8 @@
                     name.innerHTML = filename.substring(0, filename.lastIndexOf('.')).substring(0, 12);
                     container.appendChild(name);
 
-                    container.addEventListener('click', function() {
-                        display_selected_image(file.type.startsWith('image/') ? 'img' : 'video', reader.result);
+                    media.addEventListener('click', function() {
+                        display_selected_image(media_node_type, reader.result);
                     });
 
                     thumbnail_grid.appendChild(container);
@@ -337,8 +448,6 @@
             media.style.opacity = 0;
             document.body.appendChild(media);
             fade_in(media, duration);
-
-            return;
         }
         else {
             parent_media = get_media_node(media_node_type, media_src);
@@ -346,8 +455,13 @@
             parent_media_container.appendChild(parent_media);
             parent_media_container.style.display = 'block';
             parent_media_container.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
 
+        }
+        const size_slider = document.getElementById('size_slider');
+        const p = document.getElementById('parent_media');
+        size_slider.max.value = Math.min(p.width, p.height) / 2;
+        size_slider.min.value = 0;
+        
     }
 
     document.getElementById('reset_all_btn').addEventListener('click', function() {
