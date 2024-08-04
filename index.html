@@ -19,45 +19,38 @@
         }
         button {
             margin: 5px auto;
-            padding: 7px 10px;
+            padding: 7px 4px;
             font-size: 16px;
             color: #fff;
             cursor: pointer;
             border-radius: 5px;
-            border: 1px solid #a1a1a1;
+            border: none;
             background-color: #2e4268;
         }
         #image_input_btn {
-            border: 1px solid #a1a1a1;
             background-color: #00639c;
         }
         #audio_input_btn {
-            border: 1px solid #a1a1a1;
             background-color: #165331;
         }
         #reset_all_btn {
-            border: 1px solid #a1a1a1;
-            background-color: #7100a5;
+            background-color: #5f008b;
         }
         #reset_parent_btn, #clear_overlay {
-            border: 1px solid #a1a1a1;
             background-color: #1e00a5;
         }
         #stop_all {
-            border: 1px solid #a1a1a1;
-            background-color: #550000;
+            background-color: #860000;
         }
         .move {
-            border: 1px solid #a1a1a1;
-            background-color: #6b4040;
+            background-color: #915555;
         }
         .keyframe_anime {
-            border: 1px solid #a1a1a1;
-            background-color: #4f7958;
+            background-color: #237034;
         }
         .effect {
-            border: 1px solid #a1a1a1;
-            background-color: #687400;
+            color: #1f1e1e;
+            background-color: #acbd18;
         }
         #thumbnail_grid {
             display: flex;
@@ -140,7 +133,6 @@
             color: #34bfff;
             border: 4px solid #006a94;
             padding: 5px;
-            margin: 5px;
             position: absolute;
             z-index: 2;
             white-space: pre-wrap;
@@ -151,18 +143,23 @@
             padding: 2px;
             background-color: #3b3b3b;
             color: #f3f3f3;
+            margin: 4px;
         }
         table {
             margin: 0 auto;
         }
         input[type="color"] {
             padding: 0;
+            width: 2em;
+            height: 2em;
             border: 1px solid #553dbd;
         }
         input[type="text"] {
             padding: 4px;
-            margin-top: 1.5em;
             border: 1px solid #553dbd;
+        }
+        input[type="range"] {
+            width: 80px;
         }
     </style>
 </head>
@@ -172,23 +169,31 @@
     <table>
         <tr>
             <td>
-                <div><strong>MotionJak</strong></div>
-                <input type="file" id="image_input" accept="image/*,video/*" multiple style="display:none;">
-                <input type="file" id="audio_input" accept="audio/mpeg" style="display:none; max-width: 50%">
-                
-                <button id="image_input_btn">Import Media</button>
-                <button id="audio_input_btn">Import Audio</button>
-                <button id="reset_parent_btn">Wipe Display</button>
-                <button id="reset_all_btn">Reset All</button>
-            </td>
-            <td>
-                <input type="text" id="filepath" placeholder="full path to video directory">
+                <table>
+                    <tr>
+                        <td>
+                            <div><strong>Import</strong></div>
+                            <input type="file" id="image_input" accept="image/*,video/*" multiple style="display:none;">
+                            <input type="file" id="audio_input" accept="audio/mpeg" style="display:none; max-width: 50%">
+                            
+                            <button id="image_input_btn">Media</button>
+                            <button id="audio_input_btn">Audio</button>
+                            <button id="reset_parent_btn">Wipe Display</button>
+                            <button id="reset_all_btn">Wipe All</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" id="filepath" placeholder="full path to video directory">
+                        </td>
+                    </tr>
+                </table>
             </td>
             <td>
                 <table>
                     <tr>
                         <td>
-                            <button id="stop_all">Stop Keyframes</button>
+                            <button id="stop_all">stop keyframes</button>
                             <button id="curtsey" class="keyframe_anime">curtsey</button>
                             <button id="hobble" class="keyframe_anime">hobble</button>
                             <button id="go_to_center" class="move">center center</button>
@@ -198,15 +203,15 @@
                     </tr>
                     <tr>
                         <td>
-                            <button id="clear_overlay">Clear Overlay</button>
-                            <button id="go_off_screen">exit screen</button>
+                            <button id="clear_overlay">wipe overlay</button>
+                            <button id="go_off_screen">exit</button>
                             <button id="walk">walk</button>
                             <button id="crouch">crouch</button>
                             <button id="left_corner" class="move">left</button>
                             <button id="go_to_center_bottom" class="move">center</button>
                             <button id="right_corner" class="move">right</button>
-                            <button id="fade_in" class="effect">fade in</button>
-                            <button id="fade_out" class="effect">fade out</button>
+                            <button id="fade_in" class="effect">fin</button>
+                            <button id="fade_out" class="effect">fout</button>
                         </td>
                     </tr>
                 </table>
@@ -234,9 +239,10 @@
                 </table>
             </td>
             <td>
+                <div id="text_overlay"></div>
                 <div class="controls">
                     <label>
-                        Background <input type="color" id="bg_color" value="#00335e">
+                        Bg <input type="color" id="bg_color" value="#00335e">
                     </label>
                     <label>
                         Text <input type="color" id="text_color" value="#34bfff">
@@ -245,8 +251,7 @@
                         Border <input type="color" id="border_color" value="#006a94">
                     </label>
                 </div>
-                <div id="text_overlay"></div>
-                <textarea type="textarea" id="textInput" cols="40" rows="4" placeholder="Enter dialogue here"></textarea>
+                <textarea type="textarea" id="textInput" cols="30" rows="3" placeholder="Enter dialogue here"></textarea>
             </td>
         </tr>
     </table>
