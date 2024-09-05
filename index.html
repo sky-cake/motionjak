@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MotionJak</title>
+    <link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiBmaWxsPSJibGFjayIvPjwvc3ZnPg==">
+    <title>Animetion</title>
     <style>
         body {
             font-family: 'Ubuntu', sans-serif;
@@ -136,7 +137,12 @@
             position: absolute;
             z-index: 2;
             white-space: pre-wrap;
+            font-size: 40px;
         }
+        input[type=number]{
+            width: 4em;
+        }
+        input[type=number],
         #textInput {
             border: 1px solid #553dbd;
             border-radius: 5px;
@@ -161,6 +167,13 @@
         input[type="range"] {
             width: 80px;
         }
+        .hidden {
+            display: none;
+        }
+        #siteInfo {
+            text-align: left;
+            max-width: 500px;
+        }
     </style>
 </head>
 <body>
@@ -172,17 +185,32 @@
                 <table>
                     <tr>
                         <td>
+                            <div><strong>Site</strong></div>
+                            <button id="siteInfoBtn">Info Toggle</button>
+                            <div id="siteInfo" class="hidden">
+                                <ul>
+                                    <li>Select media from your computer using the Import-Media button.</li>
+                                    <li>All imported media remains in your browser. This site has no backend server to receive data, it is entirely one page made with HTML, CSS, and JS.</li>
+                                    <li>The "full path to video directory" field is only applicable when this HTML page is run locally as a file://. By doing so, you can stream large files, and they aren't loaded into a browsers memory.</li>
+                                    <li>The first image you select after your import is your backdrop.</li>
+                                    <li>The second image you select is your sprite to control.</li>
+                                    <li>This site is not mobile friendly, and is not intended to be.</li>
+                                    <li>Enjoy!</li>
+                                </ul>
+                            </div>
+                        </td>
+                        <td>
                             <div><strong>Import</strong></div>
                             <input type="file" id="image_input" accept="image/*,video/*" multiple style="display:none;">
                             <input type="file" id="audio_input" accept="audio/mpeg" style="display:none; max-width: 50%">
-                            
                             <button id="image_input_btn">Media</button>
                             <button id="audio_input_btn">Audio</button>
+                            <button id="reset_all_btn">Reset</button>
                             <button id="reset_parent_btn">Wipe Display</button>
-                            <button id="reset_all_btn">Wipe All</button>
                         </td>
                     </tr>
                     <tr>
+                        <td></td>
                         <td>
                             <input type="text" id="filepath" placeholder="full path to video directory">
                         </td>
@@ -239,7 +267,6 @@
                 </table>
             </td>
             <td>
-                <div id="text_overlay"></div>
                 <div class="controls">
                     <label>
                         Bg <input type="color" id="bg_color" value="#00335e">
@@ -250,6 +277,10 @@
                     <label>
                         Border <input type="color" id="border_color" value="#006a94">
                     </label>
+                    <label>
+                        Size <input type="number" id="text_size" value="30">
+                    </label>
+                    <div id="text_overlay"></div>
                 </div>
                 <textarea type="textarea" id="textInput" cols="30" rows="3" placeholder="Enter dialogue here"></textarea>
             </td>
@@ -302,6 +333,7 @@
     const textColorInput = document.getElementById('text_color');
     const borderColorInput = document.getElementById('border_color');
     const textOverlay = document.getElementById('text_overlay');
+    const textSize = document.getElementById('text_size');
     function updateColors() {
         textOverlay.style.backgroundColor = bgColorInput.value;
         textOverlay.style.color = textColorInput.value;
@@ -310,8 +342,13 @@
     bgColorInput.addEventListener('input', updateColors);
     textColorInput.addEventListener('input', updateColors);
     borderColorInput.addEventListener('input', updateColors);
+    textSize.addEventListener('change', () => {textOverlay.style.fontSize = textSize.value + 'px';});
     updateColors();
 
+    document.getElementById('siteInfoBtn').addEventListener('click', function() {
+        var siteInfo = document.getElementById('siteInfo');
+        siteInfo.classList.toggle('hidden');
+    });
 
     document.getElementById('image_input_btn').addEventListener('click', () => {
         document.getElementById('image_input').click();
